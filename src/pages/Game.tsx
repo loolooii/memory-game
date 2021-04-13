@@ -1,5 +1,7 @@
 import { FC } from "react";
 import {
+  Button,
+  CircularProgress,
   Grid,
   makeStyles,
   Typography,
@@ -8,6 +10,14 @@ import {
 } from "@material-ui/core";
 import clsx from "clsx";
 import MemoryGameCard from "../components/MemoryGameCard";
+import { useAppSelector, useAppDispatch } from "../hooks/hooks";
+import { selectIsLoading, setLoading } from "../reducers/appReducer";
+import {
+  selectScore,
+  selectStatus,
+  updateScore,
+  setStatus,
+} from "../reducers/gameReducer";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -30,11 +40,18 @@ const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
   const theme = useTheme();
   const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
+  const loading = useAppSelector(selectIsLoading);
+  const score = useAppSelector(selectScore);
+  const status = useAppSelector(selectStatus);
+  const dispatch = useAppDispatch();
   // TODO: countdown and dynamic score
   const time = "60 seconds";
-  const score = 500;
+  // const score = 500;
   return (
     <>
+      <Button onClick={() => dispatch(setLoading(true))}>start loading</Button>
+
+      {loading && <CircularProgress />}
       <div
         className={clsx([grid, isDesktopOrTablet ? desktopGrid : mobileGrid])}
       >
@@ -43,7 +60,7 @@ const Game: FC = () => {
             key={key}
             cardId={key.toString()}
             image="dadwaddwa"
-            onClick={() => {}}
+            onClick={() => dispatch(updateScore(10))}
           />
         ))}
       </div>

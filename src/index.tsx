@@ -6,13 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import "typeface-roboto";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const theme = responsiveFontSizes(createMuiTheme());
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
