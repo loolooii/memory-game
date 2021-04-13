@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Button,
   CircularProgress,
@@ -11,13 +11,16 @@ import {
 import clsx from "clsx";
 import MemoryGameCard from "../components/MemoryGameCard";
 import { useAppSelector, useAppDispatch } from "../hooks/hooks";
-import { selectIsLoading, setLoading } from "../reducers/appReducer";
 import {
+  selectIsLoading,
   selectScore,
   selectStatus,
   updateScore,
-  setStatus,
-} from "../reducers/gameReducer";
+  getAvatars,
+  selectAvatars,
+} from "../reducers/appReducer";
+import { AvatarInfo } from "../types/types";
+import { getElementsFromArray } from "../utils/helpers";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -42,38 +45,106 @@ const Game: FC = () => {
   const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
   const loading = useAppSelector(selectIsLoading);
   const score = useAppSelector(selectScore);
+  const avatars = useAppSelector(selectAvatars);
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
-  // TODO: countdown and dynamic score
+  // TODO: countdown
   const time = "60 seconds";
-  // const score = 500;
+  const [avatarList, setAvatarList] = useState<AvatarInfo[]>([]);
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
+
+  useEffect(() => {
+    setAvatarList(getElementsFromArray(avatars, 6));
+  }, [avatars]);
+
+  useEffect(() => {
+    if (selectedCards.length === 2) {
+      console.log(selectedCards);
+      if (selectedCards[0] === selectedCards[1]) {
+        dispatch(updateScore(100));
+      } else {
+        setTimeout(() => {
+          setAvatarList(
+            avatarList.map((avatar) => {
+              if (
+                avatar.id === selectedCards[0] ||
+                avatar.id === selectedCards[1]
+              ) {
+                return { ...avatar, visible: false };
+              }
+              return avatar;
+            })
+          );
+        }, 1000);
+      }
+      setSelectedCards([]);
+    }
+  }, [selectedCards, dispatch, avatarList]);
+
+  const handleCardClick = (randomId: number, cardId: string, index: number) => {
+    setSelectedCards((prev) => [...prev, cardId]);
+
+    setAvatarList(
+      avatarList.map((avatar) => {
+        if (avatar.randomId === randomId) {
+          return { ...avatar, visible: true };
+        }
+        return avatar;
+      })
+    );
+  };
+
+  if (loading) return <CircularProgress />;
+
   return (
     <>
-      <Button onClick={() => dispatch(setLoading(true))}>start loading</Button>
-
-      {loading && <CircularProgress />}
-      <div
-        className={clsx([grid, isDesktopOrTablet ? desktopGrid : mobileGrid])}
-      >
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((key) => (
-          <MemoryGameCard
-            key={key}
-            cardId={key.toString()}
-            image="dadwaddwa"
-            onClick={() => dispatch(updateScore(10))}
-          />
-        ))}
-      </div>
-      <Grid container justify="space-between">
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h4">Time: {time}</Typography>
+      {status === "not_started" ? (
+        <Grid container justify="center" alignItems="center">
+          <Grid item>
+            <Button
+              onClick={() => dispatch(getAvatars())}
+              variant="contained"
+              color="primary"
+            >
+              start game
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h4" align={isDesktopOrTablet ? "right" : "left"}>
-            Score: {score}
-          </Typography>
-        </Grid>
-      </Grid>
+      ) : (
+        <>
+          <div
+            className={clsx([
+              grid,
+              isDesktopOrTablet ? desktopGrid : mobileGrid,
+            ])}
+          >
+            {avatarList.map((avatar, index) => (
+              <MemoryGameCard
+                key={avatar.id + index}
+                cardId={avatar.id}
+                image={avatar.url}
+                visible={avatar.visible}
+                onClick={() =>
+                  handleCardClick(avatar.randomId, avatar.id, index)
+                }
+              />
+            ))}
+          </div>
+          <Grid container justify="space-between">
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h4">Time: {time}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography
+                variant="h4"
+                align={isDesktopOrTablet ? "right" : "left"}
+              >
+                Score: {score}
+              </Typography>
+            </Grid>
+          </Grid>{" "}
+        </>
+      )}
     </>
   );
 };

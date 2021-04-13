@@ -1,10 +1,11 @@
 import { FC } from "react";
-import { Card, CardActionArea, makeStyles } from "@material-ui/core";
+import { Card, CardActionArea, makeStyles, CardMedia } from "@material-ui/core";
 
 interface MemoryGameCardProps {
   cardId: string;
   image: string;
-  onClick: (cardId: string) => void;
+  visible: boolean;
+  onClick: () => void;
 }
 const useStyles = makeStyles(() => ({
   root: {
@@ -17,14 +18,23 @@ const useStyles = makeStyles(() => ({
 const MemoryGameCard: FC<MemoryGameCardProps> = ({
   cardId,
   image,
+  visible,
   onClick,
 }) => {
   const { clickableArea, root } = useStyles();
 
   return (
-    <Card classes={{ root }} onClick={() => onClick(cardId)}>
+    <Card classes={{ root }} onClick={onClick}>
       <CardActionArea className={clickableArea}>
-        <img alt={`Memory game card ${cardId}`} src={image} />
+        {visible ? (
+          <CardMedia
+            component="img"
+            alt={`Memory game card ${cardId}`}
+            image={image}
+          />
+        ) : (
+          <p>****</p>
+        )}
       </CardActionArea>
     </Card>
   );
