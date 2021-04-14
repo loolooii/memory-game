@@ -18,8 +18,8 @@ const initialState: AppState = {
   cards: [],
 };
 
-export const getAvatars = createAsyncThunk(
-  "getAvatars",
+export const getCards = createAsyncThunk(
+  "getCards",
   async (): Promise<CardInfo[]> => {
     const result = await fetch(
       "https://api.github.com/repos/facebook/react/contributors?per_page=25"
@@ -55,14 +55,17 @@ const slice = createSlice({
     },
     setStatus: (state, action: PayloadAction<GameStatus>) => {
       state.status = action.payload;
+      if (state.status === "started") {
+        state.score = 0;
+      }
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAvatars.pending, (state) => {
+      .addCase(getCards.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAvatars.fulfilled, (state, action) => {
+      .addCase(getCards.fulfilled, (state, action) => {
         state.loading = false;
         state.status = "started";
         state.cards = action.payload;

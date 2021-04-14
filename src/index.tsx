@@ -5,7 +5,9 @@ import reportWebVitals from "./reportWebVitals";
 import "typeface-roboto";
 import { ThemeProvider } from "@material-ui/styles";
 import {
-  createMuiTheme,
+  // this is needed as a temporary solution to:
+  // "findDOMNode is deprecated in StrictMode" caused by MaterialUI theming
+  unstable_createMuiStrictModeTheme as createMuiTheme,
   CssBaseline,
   responsiveFontSizes,
 } from "@material-ui/core";

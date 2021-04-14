@@ -17,7 +17,8 @@ import {
   selectStatus,
   selectCards,
   updateScore,
-  getAvatars,
+  getCards,
+  setStatus,
 } from "../store/reducers/appReducer";
 import { CardInfo } from "../types/types";
 import { dealCards, hideCards, revealCard } from "../utils/helpers";
@@ -40,6 +41,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const GAME_TIME = 10;
+
 const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
   const theme = useTheme();
@@ -49,15 +52,16 @@ const Game: FC = () => {
   const cards = useAppSelector(selectCards);
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
-  // TODO: countdown
-  const time = "60 seconds";
+  const [timeLeft, setTimeLeft] = useState<number>(GAME_TIME);
   const [cardsList, setCardsList] = useState<CardInfo[]>([]);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
+  // handles dealing cards
   useEffect(() => {
     setCardsList(dealCards(cards, 6));
   }, [cards]);
 
+  // handles playing
   useEffect(() => {
     if (selectedCards.length === 2) {
       if (selectedCards[0] === selectedCards[1]) {
@@ -71,6 +75,22 @@ const Game: FC = () => {
     }
   }, [selectedCards, dispatch, cardsList]);
 
+  // handles timer
+  useEffect(() => {
+    if (timeLeft > 0 && status !== "won" && status !== "lost") {
+      setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    } else if (timeLeft === 0) {
+      dispatch(setStatus("lost"));
+    }
+    return () => clearInterval(timeLeft);
+  }, [timeLeft, dispatch, status]);
+
+  const startGame = () => {
+    setTimeLeft(GAME_TIME);
+    dispatch(setStatus("started"));
+    dispatch(getCards());
+  };
+
   const handleCardClick = (randomId: number, cardId: string) => {
     setSelectedCards((prev) => [...prev, cardId]);
     setCardsList(revealCard(cardsList, randomId));
@@ -80,12 +100,12 @@ const Game: FC = () => {
 
   return (
     <>
-      <EndGameDialog status={status} onButtonClick={() => {}} score={score} />
+      <EndGameDialog status={status} onButtonClick={startGame} score={score} />
       {status === "not_started" ? (
         <Grid container justify="center" alignItems="center">
           <Grid item>
             <Button
-              onClick={() => dispatch(getAvatars())}
+              onClick={() => dispatch(getCards())}
               variant="contained"
               color="primary"
             >
@@ -113,7 +133,7 @@ const Game: FC = () => {
           </div>
           <Grid container justify="space-between">
             <Grid item xs={12} sm={6}>
-              <Typography variant="h4">Time: {time}</Typography>
+              <Typography variant="h4">Time: {timeLeft} seconds</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography

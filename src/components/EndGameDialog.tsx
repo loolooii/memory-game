@@ -21,6 +21,8 @@ const EndGameDialog: FC<EndGameDialogProps> = ({
 }) => {
   return (
     <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
       fullWidth
       maxWidth="sm"
       open={status === "won" || status === "lost"}
