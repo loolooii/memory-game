@@ -39,7 +39,9 @@
     },
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
-      "!src/index.tsx"
+      "!src/index.tsx",
+      "!src/types/*",
+      "!src/reducers/initialState.ts"
     ]
   },
   "eslintConfig": {

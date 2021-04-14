@@ -1,22 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import initialState from "../reducers/initalState";
 import { CardInfo, GameStatus } from "../../types/types";
-
-interface AppState {
-  loading: boolean;
-  error: string;
-  score: number;
-  status: GameStatus;
-  cards: CardInfo[];
-}
-
-const initialState: AppState = {
-  loading: false,
-  error: "",
-  score: 0,
-  status: "not_started",
-  cards: [],
-};
 
 export const getCards = createAsyncThunk(
   "getCards",
