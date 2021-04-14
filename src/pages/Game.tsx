@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const GAME_TIME = 10;
+const GAME_TIME = 60;
 
 const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
