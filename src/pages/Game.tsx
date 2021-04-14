@@ -15,12 +15,13 @@ import {
   selectIsLoading,
   selectScore,
   selectStatus,
+  selectCards,
   updateScore,
   getAvatars,
-  selectAvatars,
-} from "../reducers/appReducer";
-import { AvatarInfo } from "../types/types";
-import { getElementsFromArray } from "../utils/helpers";
+} from "../store/reducers/appReducer";
+import { CardInfo } from "../types/types";
+import { dealCards, hideCards, revealCard } from "../utils/helpers";
+import EndGameDialog from "../components/EndGameDialog";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -45,59 +46,41 @@ const Game: FC = () => {
   const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
   const loading = useAppSelector(selectIsLoading);
   const score = useAppSelector(selectScore);
-  const avatars = useAppSelector(selectAvatars);
+  const cards = useAppSelector(selectCards);
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
   // TODO: countdown
   const time = "60 seconds";
-  const [avatarList, setAvatarList] = useState<AvatarInfo[]>([]);
+  const [cardsList, setCardsList] = useState<CardInfo[]>([]);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
 
   useEffect(() => {
-    setAvatarList(getElementsFromArray(avatars, 6));
-  }, [avatars]);
+    setCardsList(dealCards(cards, 6));
+  }, [cards]);
 
   useEffect(() => {
     if (selectedCards.length === 2) {
-      console.log(selectedCards);
       if (selectedCards[0] === selectedCards[1]) {
         dispatch(updateScore(100));
       } else {
         setTimeout(() => {
-          setAvatarList(
-            avatarList.map((avatar) => {
-              if (
-                avatar.id === selectedCards[0] ||
-                avatar.id === selectedCards[1]
-              ) {
-                return { ...avatar, visible: false };
-              }
-              return avatar;
-            })
-          );
-        }, 1000);
+          setCardsList(hideCards(cardsList, selectedCards));
+        }, 2000);
       }
       setSelectedCards([]);
     }
-  }, [selectedCards, dispatch, avatarList]);
+  }, [selectedCards, dispatch, cardsList]);
 
-  const handleCardClick = (randomId: number, cardId: string, index: number) => {
+  const handleCardClick = (randomId: number, cardId: string) => {
     setSelectedCards((prev) => [...prev, cardId]);
-
-    setAvatarList(
-      avatarList.map((avatar) => {
-        if (avatar.randomId === randomId) {
-          return { ...avatar, visible: true };
-        }
-        return avatar;
-      })
-    );
+    setCardsList(revealCard(cardsList, randomId));
   };
 
   if (loading) return <CircularProgress />;
 
   return (
     <>
+      <EndGameDialog status={status} onButtonClick={() => {}} score={score} />
       {status === "not_started" ? (
         <Grid container justify="center" alignItems="center">
           <Grid item>
@@ -118,15 +101,13 @@ const Game: FC = () => {
               isDesktopOrTablet ? desktopGrid : mobileGrid,
             ])}
           >
-            {avatarList.map((avatar, index) => (
+            {cardsList.map((card, index) => (
               <MemoryGameCard
-                key={avatar.id + index}
-                cardId={avatar.id}
-                image={avatar.url}
-                visible={avatar.visible}
-                onClick={() =>
-                  handleCardClick(avatar.randomId, avatar.id, index)
-                }
+                key={card.avatarId + index}
+                cardId={card.avatarId}
+                image={card.avatarUrl}
+                visible={card.visible}
+                onClick={() => handleCardClick(card.randomId, card.avatarId)}
               />
             ))}
           </div>
@@ -142,7 +123,7 @@ const Game: FC = () => {
                 Score: {score}
               </Typography>
             </Grid>
-          </Grid>{" "}
+          </Grid>
         </>
       )}
     </>

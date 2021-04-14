@@ -1,14 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store/store";
-import { AvatarInfo } from "../types/types";
+import { RootState } from "../store";
+import { CardInfo, GameStatus } from "../../types/types";
 
-type GameStatus = "finished" | "not_started" | "ongoing";
 interface AppState {
   loading: boolean;
   error: string;
   score: number;
   status: GameStatus;
-  avatars: AvatarInfo[];
+  cards: CardInfo[];
 }
 
 const initialState: AppState = {
@@ -16,25 +15,25 @@ const initialState: AppState = {
   error: "",
   score: 0,
   status: "not_started",
-  avatars: [],
+  cards: [],
 };
 
 export const getAvatars = createAsyncThunk(
-  "game/getAvatars",
-  async (): Promise<AvatarInfo[]> => {
+  "getAvatars",
+  async (): Promise<CardInfo[]> => {
     const result = await fetch(
       "https://api.github.com/repos/facebook/react/contributors?per_page=25"
     ).then((response) => response.json());
 
-    const avatars = result.map((item: any) => {
+    const cards = result.map((item: any) => {
       return {
-        url: item.avatar_url,
-        id: item.node_id,
+        avatarUrl: item.avatar_url,
+        avatarId: item.node_id,
         visible: false,
         randomId: 0,
-      } as AvatarInfo;
+      } as CardInfo;
     });
-    return avatars;
+    return cards;
   }
 );
 
@@ -50,6 +49,9 @@ const slice = createSlice({
     },
     updateScore: (state, action: PayloadAction<number>) => {
       state.score += action.payload;
+      if (state.score === 600) {
+        state.status = "won";
+      }
     },
     setStatus: (state, action: PayloadAction<GameStatus>) => {
       state.status = action.payload;
@@ -62,8 +64,8 @@ const slice = createSlice({
       })
       .addCase(getAvatars.fulfilled, (state, action) => {
         state.loading = false;
-        state.status = "ongoing";
-        state.avatars = action.payload;
+        state.status = "started";
+        state.cards = action.payload;
       });
   },
 });
@@ -73,6 +75,6 @@ export const selectIsLoading = (state: RootState) => state.app.loading;
 export const selectError = (state: RootState) => state.app.error;
 export const selectScore = (state: RootState) => state.app.score;
 export const selectStatus = (state: RootState) => state.app.status;
-export const selectAvatars = (state: RootState) => state.app.avatars;
+export const selectCards = (state: RootState) => state.app.cards;
 
 export default slice.reducer;

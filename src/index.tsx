@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "typeface-roboto";
 import { ThemeProvider } from "@material-ui/styles";
-import { createMuiTheme, responsiveFontSizes } from "@material-ui/core";
+import {
+  createMuiTheme,
+  CssBaseline,
+  responsiveFontSizes,
+} from "@material-ui/core";
 import { Provider } from "react-redux";
 import store from "./store/store";
 
@@ -13,6 +16,7 @@ const theme = responsiveFontSizes(createMuiTheme());
 
 ReactDOM.render(
   <React.StrictMode>
+    <CssBaseline />
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <App />

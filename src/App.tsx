@@ -1,24 +1,21 @@
 import { FC } from "react";
-import { CssBaseline, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import PageContainer from "./components/PageContainer";
 import Header from "./components/Header";
 import Game from "./pages/Game";
 
 const App: FC = () => {
   return (
-    <>
-      <CssBaseline />
-      <Grid container direction="column">
-        <Grid item>
-          <Header title="Github Memory" />
-        </Grid>
-        <Grid item>
-          <PageContainer>
-            <Game />
-          </PageContainer>
-        </Grid>
+    <Grid container direction="column">
+      <Grid item>
+        <Header title="Github Memory" />
       </Grid>
-    </>
+      <Grid item>
+        <PageContainer>
+          <Game />
+        </PageContainer>
+      </Grid>
+    </Grid>
   );
 };
 
