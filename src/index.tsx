@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import 'typeface-roboto';
-import { ThemeProvider } from '@material-ui/styles';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import "typeface-roboto";
+import { ThemeProvider } from "@material-ui/styles";
 import {
   // this is needed as a temporary solution to:
   // "findDOMNode is deprecated in StrictMode" caused by MaterialUI theming
   unstable_createMuiStrictModeTheme as createMuiTheme,
   CssBaseline,
   responsiveFontSizes,
-} from '@material-ui/core';
-import { Provider } from 'react-redux';
-import store from './store/store';
+} from "@material-ui/core";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const theme = responsiveFontSizes(createMuiTheme());
 
@@ -25,7 +25,7 @@ ReactDOM.render(
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

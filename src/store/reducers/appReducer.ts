@@ -1,12 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from 'store/store';
-import initialState from 'store/initalState';
-import { CardInfo, GameStatus } from 'types/types';
-import getAvatars from 'services/getAvatars';
-import { transformAvatars } from 'utils/helpers';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "store/store";
+import initialState from "store/initalState";
+import { CardInfo, GameStatus } from "types/types";
+import getAvatars from "services/getAvatars";
+import { transformAvatars } from "utils/helpers";
 
 export const getCards = createAsyncThunk(
-  'getCards',
+  "getCards",
   async (): Promise<CardInfo[]> => {
     const avatars = await getAvatars();
     return transformAvatars(avatars);
@@ -14,7 +14,7 @@ export const getCards = createAsyncThunk(
 );
 
 const slice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -26,12 +26,12 @@ const slice = createSlice({
     updateScore: (state, action: PayloadAction<number>) => {
       state.score += action.payload;
       if (state.score === 600) {
-        state.status = 'won';
+        state.status = "won";
       }
     },
     setStatus: (state, action: PayloadAction<GameStatus>) => {
       state.status = action.payload;
-      if (state.status === 'started') {
+      if (state.status === "started") {
         state.score = 0;
       }
     },
@@ -43,12 +43,12 @@ const slice = createSlice({
       })
       .addCase(getCards.fulfilled, (state, action) => {
         state.loading = false;
-        state.status = 'started';
+        state.status = "started";
         state.cards = action.payload;
       })
       .addCase(getCards.rejected, (state) => {
         state.loading = false;
-        state.error = 'Something went wrong fetching cards data';
+        state.error = "Something went wrong fetching cards data";
       });
   },
 });

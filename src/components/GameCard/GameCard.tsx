@@ -1,6 +1,6 @@
-import { FC } from 'react';
-import { Card, CardActionArea, makeStyles, CardMedia } from '@material-ui/core';
-import placeholderImage from 'images/brain.jpeg';
+import { FC } from "react";
+import { Card, CardActionArea, makeStyles, CardMedia } from "@material-ui/core";
+import placeholderImage from "images/brain.jpeg";
 
 interface MemoryGameCardProps {
   cardId: string;
@@ -11,10 +11,10 @@ interface MemoryGameCardProps {
 }
 const useStyles = makeStyles(() => ({
   root: {
-    aspectRatio: '1',
+    aspectRatio: "1",
   },
   clickableArea: {
-    height: '100%',
+    height: "100%",
   },
 }));
 const MemoryGameCard: FC<MemoryGameCardProps> = ({
