@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
 const PageContainer: FC = ({ children }) => {
   const { container } = useStyles();
   return (
-    <Container className={container} maxWidth="md">
+    <Container data-testid="page-container" className={container} maxWidth="md">
       <>{children}</>
     </Container>
   );

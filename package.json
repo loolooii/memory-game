@@ -39,11 +39,14 @@
         "statements": 80
       }
     },
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
-      "!src/index.tsx",
-      "!src/types/*",
-      "!src/reducers/initialState.ts"
+    "coveragePathIgnorePatterns": [
+      "src/index.tsx",
+      "src/App.tsx",
+      "src/types/*",
+      "src/store/initialState.ts",
+      "src/reportWebVitals.ts",
+      "src/react-app-env.d.ts",
+      "src/store/store.ts"
     ]
   },
   "eslintConfig": {

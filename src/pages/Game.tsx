@@ -9,7 +9,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import clsx from "clsx";
-import MemoryGameCard from "components/MemoryGameCard";
+import MemoryGameCard from "components/GameCard/GameCard";
 import { useAppSelector, useAppDispatch } from "store/store";
 import {
   selectIsLoading,
@@ -22,7 +22,7 @@ import {
 } from "store/reducers/appReducer";
 import { CardInfo, SelectedCard } from "types/types";
 import { dealCards, hideCards, revealCard } from "utils/helpers";
-import EndGameDialog from "components/EndGameDialog";
+import EndGameDialog from "components/EndGameDialog/EndGameDialog";
 
 const useStyles = makeStyles(() => ({
   grid: {

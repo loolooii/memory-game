@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Card, CardActionArea, makeStyles, CardMedia } from "@material-ui/core";
+import placeholderImage from "images/brain.jpeg";
 
 interface MemoryGameCardProps {
   cardId: string;
@@ -32,15 +33,11 @@ const MemoryGameCard: FC<MemoryGameCardProps> = ({
         disabled={disabled}
         className={clickableArea}
       >
-        {visible ? (
-          <CardMedia
-            component="img"
-            alt={`Memory game card ${cardId}`}
-            image={image}
-          />
-        ) : (
-          <p>****</p>
-        )}
+        <CardMedia
+          component="img"
+          alt={`Memory game card ${cardId}`}
+          image={visible ? image : placeholderImage}
+        />
       </CardActionArea>
     </Card>
   );
