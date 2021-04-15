@@ -1,12 +1,12 @@
-import { render } from "@testing-library/react";
-import GameCard from "./GameCard";
+import { render } from '@testing-library/react';
+import GameCard from './GameCard';
 
-describe("<GameCard />", () => {
-  const cardId = "someId";
-  const image = "someImg";
+describe('<GameCard />', () => {
+  const cardId = 'someId';
+  const image = 'someImg';
   const onClick = jest.fn();
 
-  it("should show hidden image", () => {
+  it('should show hidden image', () => {
     const disabled = false;
     const visible = false;
     const { getByAltText } = render(
@@ -19,10 +19,10 @@ describe("<GameCard />", () => {
       />
     );
     const displayedImage = getByAltText(`Memory game card ${cardId}`);
-    expect(displayedImage.getAttribute("src")).toContain("jpeg");
+    expect(displayedImage.getAttribute('src')).toContain('jpeg');
   });
 
-  it("should show visible image", () => {
+  it('should show visible image', () => {
     const visible = true;
     const { getByAltText } = render(
       <GameCard
@@ -33,6 +33,6 @@ describe("<GameCard />", () => {
       />
     );
     const displayedImage = getByAltText(`Memory game card ${cardId}`);
-    expect(displayedImage.getAttribute("src")).toContain(image);
+    expect(displayedImage.getAttribute('src')).toContain(image);
   });
 });

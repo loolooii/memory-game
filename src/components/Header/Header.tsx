@@ -1,5 +1,5 @@
-import { makeStyles, createStyles, Typography } from "@material-ui/core";
-import { FC } from "react";
+import { makeStyles, createStyles, Typography } from '@material-ui/core';
+import { FC } from 'react';
 
 interface HeaderProps {
   title: string;
@@ -8,9 +8,9 @@ interface HeaderProps {
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
-      textAlign: "center",
-      padding: "16px 0",
-      borderBottom: "1px solid #CCC",
+      textAlign: 'center',
+      padding: '16px 0',
+      borderBottom: '1px solid #CCC',
     },
   })
 );

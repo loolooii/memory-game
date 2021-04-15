@@ -1,4 +1,4 @@
-import { CardInfo, SelectedCard } from "types/types";
+import { CardInfo, SelectedCard } from 'types/types';
 
 export const transformAvatars = (result: any): CardInfo[] =>
   result.map((item: any) => {

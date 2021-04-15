@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Container, makeStyles } from "@material-ui/core";
+import { FC } from 'react';
+import { Container, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   container: {

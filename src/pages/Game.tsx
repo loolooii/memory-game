@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from 'react';
 import {
   Button,
   CircularProgress,
@@ -7,10 +7,10 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import clsx from "clsx";
-import MemoryGameCard from "components/GameCard/GameCard";
-import { useAppSelector, useAppDispatch } from "store/store";
+} from '@material-ui/core';
+import clsx from 'clsx';
+import MemoryGameCard from 'components/GameCard/GameCard';
+import { useAppSelector, useAppDispatch } from 'store/store';
 import {
   selectIsLoading,
   selectScore,
@@ -19,25 +19,25 @@ import {
   updateScore,
   getCards,
   setStatus,
-} from "store/reducers/appReducer";
-import { CardInfo, SelectedCard } from "types/types";
-import { dealCards, hideCards, revealCard } from "utils/helpers";
-import EndGameDialog from "components/EndGameDialog/EndGameDialog";
+} from 'store/reducers/appReducer';
+import { CardInfo, SelectedCard } from 'types/types';
+import { dealCards, hideCards, revealCard } from 'utils/helpers';
+import EndGameDialog from 'components/EndGameDialog/EndGameDialog';
 
 const useStyles = makeStyles(() => ({
   grid: {
-    display: "grid",
+    display: 'grid',
     columnGap: 5,
     rowGap: 5,
   },
   mobileGrid: {
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gridTemplateRows: "repeat(4, 1fr)",
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateRows: 'repeat(4, 1fr)',
   },
   desktopGrid: {
-    justifyContent: "center",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gridTemplateRows: "repeat(3, 1fr)",
+    justifyContent: 'center',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridTemplateRows: 'repeat(3, 1fr)',
   },
 }));
 
@@ -46,7 +46,7 @@ const GAME_TIME = 60;
 const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
   const theme = useTheme();
-  const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
+  const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up('sm'));
   const loading = useAppSelector(selectIsLoading);
   const score = useAppSelector(selectScore);
   const cards = useAppSelector(selectCards);
@@ -79,17 +79,17 @@ const Game: FC = () => {
 
   // handles timer
   useEffect(() => {
-    if (timeLeft > 0 && status !== "won" && status !== "lost") {
+    if (timeLeft > 0 && status !== 'won' && status !== 'lost') {
       setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     } else if (timeLeft === 0) {
-      dispatch(setStatus("lost"));
+      dispatch(setStatus('lost'));
     }
     return () => clearInterval(timeLeft);
   }, [timeLeft, dispatch, status]);
 
   const startGame = () => {
     setTimeLeft(GAME_TIME);
-    dispatch(setStatus("started"));
+    dispatch(setStatus('started'));
     dispatch(getCards());
   };
 
@@ -103,7 +103,7 @@ const Game: FC = () => {
   return (
     <>
       <EndGameDialog status={status} onButtonClick={startGame} score={score} />
-      {status === "not_started" ? (
+      {status === 'not_started' ? (
         <Grid container justify="center" alignItems="center">
           <Grid item>
             <Button
@@ -146,7 +146,7 @@ const Game: FC = () => {
             <Grid item xs={12} sm={6}>
               <Typography
                 variant="h4"
-                align={isDesktopOrTablet ? "right" : "left"}
+                align={isDesktopOrTablet ? 'right' : 'left'}
               >
                 Score: {score}
               </Typography>

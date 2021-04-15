@@ -1,12 +1,12 @@
-import { FC } from "react";
+import { FC } from 'react';
 import {
   Button,
   Dialog,
   DialogContent,
   Grid,
   Typography,
-} from "@material-ui/core";
-import { GameStatus } from "types/types";
+} from '@material-ui/core';
+import { GameStatus } from 'types/types';
 
 interface EndGameDialogProps {
   status: GameStatus;
@@ -25,7 +25,7 @@ const EndGameDialog: FC<EndGameDialogProps> = ({
       disableEscapeKeyDown
       fullWidth
       maxWidth="sm"
-      open={status === "won" || status === "lost"}
+      open={status === 'won' || status === 'lost'}
       onClose={onButtonClick}
     >
       <DialogContent>
@@ -38,7 +38,7 @@ const EndGameDialog: FC<EndGameDialogProps> = ({
         >
           <Grid item>
             <Typography variant="h2">
-              {status === "won" ? "YOU WON! :)" : "GAME OVER! :("}
+              {status === 'won' ? 'YOU WON! :)' : 'GAME OVER! :('}
             </Typography>
           </Grid>
           <Grid item>

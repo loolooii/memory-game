@@ -1,10 +1,10 @@
-import { AppState } from "types/types";
+import { AppState } from 'types/types';
 
 const initialState: AppState = {
   loading: false,
-  error: "",
+  error: '',
   score: 0,
-  status: "not_started",
+  status: 'not_started',
   cards: [],
 };
 
