@@ -1,24 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import initialState from "../reducers/initalState";
-import { CardInfo, GameStatus } from "../../types/types";
+import { RootState } from "store/store";
+import initialState from "store/initalState";
+import { CardInfo, GameStatus } from "types/types";
+import getAvatars from "services/getAvatars";
+import { transformAvatars } from "utils/helpers";
 
 export const getCards = createAsyncThunk(
   "getCards",
   async (): Promise<CardInfo[]> => {
-    const result = await fetch(
-      "https://api.github.com/repos/facebook/react/contributors?per_page=25"
-    ).then((response) => response.json());
-
-    const cards = result.map((item: any) => {
-      return {
-        avatarUrl: item.avatar_url,
-        avatarId: item.node_id,
-        visible: false,
-        randomId: 0,
-      } as CardInfo;
-    });
-    return cards;
+    const avatars = await getAvatars();
+    return transformAvatars(avatars);
   }
 );
 
@@ -54,6 +45,10 @@ const slice = createSlice({
         state.loading = false;
         state.status = "started";
         state.cards = action.payload;
+      })
+      .addCase(getCards.rejected, (state) => {
+        state.loading = false;
+        state.error = "Something went wrong fetching cards data";
       });
   },
 });

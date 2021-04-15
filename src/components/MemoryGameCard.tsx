@@ -6,6 +6,7 @@ interface MemoryGameCardProps {
   image: string;
   visible: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,12 +21,17 @@ const MemoryGameCard: FC<MemoryGameCardProps> = ({
   image,
   visible,
   onClick,
+  disabled = false,
 }) => {
   const { clickableArea, root } = useStyles();
 
   return (
-    <Card classes={{ root }} onClick={onClick}>
-      <CardActionArea className={clickableArea}>
+    <Card classes={{ root }}>
+      <CardActionArea
+        onClick={onClick}
+        disabled={disabled}
+        className={clickableArea}
+      >
         {visible ? (
           <CardMedia
             component="img"

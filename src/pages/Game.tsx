@@ -9,8 +9,8 @@ import {
   useTheme,
 } from "@material-ui/core";
 import clsx from "clsx";
-import MemoryGameCard from "../components/MemoryGameCard";
-import { useAppSelector, useAppDispatch } from "../hooks/hooks";
+import MemoryGameCard from "components/MemoryGameCard";
+import { useAppSelector, useAppDispatch } from "store/store";
 import {
   selectIsLoading,
   selectScore,
@@ -19,10 +19,10 @@ import {
   updateScore,
   getCards,
   setStatus,
-} from "../store/reducers/appReducer";
-import { CardInfo } from "../types/types";
-import { dealCards, hideCards, revealCard } from "../utils/helpers";
-import EndGameDialog from "../components/EndGameDialog";
+} from "store/reducers/appReducer";
+import { CardInfo, SelectedCard } from "types/types";
+import { dealCards, hideCards, revealCard } from "utils/helpers";
+import EndGameDialog from "components/EndGameDialog";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -54,7 +54,7 @@ const Game: FC = () => {
   const dispatch = useAppDispatch();
   const [timeLeft, setTimeLeft] = useState<number>(GAME_TIME);
   const [cardsList, setCardsList] = useState<CardInfo[]>([]);
-  const [selectedCards, setSelectedCards] = useState<string[]>([]);
+  const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
 
   // handles dealing cards
   useEffect(() => {
@@ -64,16 +64,18 @@ const Game: FC = () => {
   // handles playing
   useEffect(() => {
     if (selectedCards.length === 2) {
-      if (selectedCards[0] === selectedCards[1]) {
+      if (selectedCards[0].avatarId === selectedCards[1].avatarId) {
         dispatch(updateScore(100));
+        setSelectedCards([]);
       } else {
         setTimeout(() => {
           setCardsList(hideCards(cardsList, selectedCards));
+          setSelectedCards([]);
         }, 2000);
       }
-      setSelectedCards([]);
     }
-  }, [selectedCards, dispatch, cardsList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCards, dispatch]);
 
   // handles timer
   useEffect(() => {
@@ -91,8 +93,8 @@ const Game: FC = () => {
     dispatch(getCards());
   };
 
-  const handleCardClick = (randomId: number, cardId: string) => {
-    setSelectedCards((prev) => [...prev, cardId]);
+  const handleCardClick = (randomId: number, avatarId: string) => {
+    setSelectedCards([...selectedCards, { avatarId, randomId }]);
     setCardsList(revealCard(cardsList, randomId));
   };
 
@@ -123,7 +125,13 @@ const Game: FC = () => {
           >
             {cardsList.map((card, index) => (
               <MemoryGameCard
-                key={card.avatarId + index}
+                disabled={
+                  selectedCards.length === 2 ||
+                  selectedCards
+                    .map((selected) => selected.randomId)
+                    .includes(card.randomId)
+                }
+                key={card.randomId}
                 cardId={card.avatarId}
                 image={card.avatarUrl}
                 visible={card.visible}

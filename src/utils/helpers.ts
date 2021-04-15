@@ -1,4 +1,14 @@
-import { CardInfo } from "../types/types";
+import { CardInfo, SelectedCard } from "types/types";
+
+export const transformAvatars = (result: any): CardInfo[] =>
+  result.map((item: any) => {
+    return {
+      avatarUrl: item.avatar_url,
+      avatarId: item.node_id,
+      visible: false,
+      randomId: 0,
+    };
+  });
 
 export const dealCards = (array: CardInfo[], n: number) => {
   const allShuffled = [...array].sort(() => 0.5 - Math.random());
@@ -11,9 +21,14 @@ export const dealCards = (array: CardInfo[], n: number) => {
   });
 };
 
-export const hideCards = (cardsList: CardInfo[], selectedCards: string[]) =>
+export const hideCards = (
+  cardsList: CardInfo[],
+  selectedCards: SelectedCard[]
+) =>
   cardsList.map((card) => {
-    if (selectedCards.includes(card.avatarId)) {
+    if (
+      selectedCards.map((selected) => selected.avatarId).includes(card.avatarId)
+    ) {
       return { ...card, visible: false };
     }
     return card;

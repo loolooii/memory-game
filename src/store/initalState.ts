@@ -1,4 +1,4 @@
-import { AppState } from "../../types/types";
+import { AppState } from "types/types";
 
 const initialState: AppState = {
   loading: false,

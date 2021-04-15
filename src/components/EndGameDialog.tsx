@@ -6,7 +6,7 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import { GameStatus } from "../types/types";
+import { GameStatus } from "types/types";
 
 interface EndGameDialogProps {
   status: GameStatus;

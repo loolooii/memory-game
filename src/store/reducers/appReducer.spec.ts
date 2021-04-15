@@ -1,5 +1,6 @@
-import { AppState } from "../../types/types";
+import { AppState } from "types/types";
 import appReducer, {
+  getCards,
   setError,
   setLoading,
   setStatus,
@@ -14,6 +15,24 @@ describe("APP REDUCER", () => {
     status: "not_started",
     cards: [],
   };
+
+  it("should test getCards", async () => {
+    const pendingAction = getCards.pending("456");
+    const pendingState = appReducer(initialState, pendingAction);
+    expect(pendingState.loading).toBe(true);
+
+    const fullFilledAction = getCards.fulfilled(
+      [{ avatarUrl: "url1", avatarId: "id1", visible: false, randomId: 0 }],
+      "123"
+    );
+    const fullFilledState = appReducer(initialState, fullFilledAction);
+    expect(fullFilledState.cards.length).toBe(1);
+    expect(fullFilledState.loading).toBe(false);
+
+    const errorAction = getCards.rejected(null, "789");
+    const errorState = appReducer(initialState, errorAction);
+    expect(errorState.error).toBe("Something went wrong fetching cards data");
+  });
   it("should set loading state correctly", () => {
     const updatedState = appReducer(initialState, setLoading(true));
     expect(updatedState.loading).toEqual(true);
@@ -48,5 +67,3 @@ describe("APP REDUCER", () => {
     expect(lostState.status).toEqual("lost");
   });
 });
-
-export {};

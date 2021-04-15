@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Grid } from "@material-ui/core";
-import PageContainer from "./components/PageContainer";
-import Header from "./components/Header";
-import Game from "./pages/Game";
+import PageContainer from "components/PageContainer";
+import Header from "components/Header";
+import Game from "pages/Game";
 
 const App: FC = () => {
   return (

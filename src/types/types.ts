@@ -12,3 +12,7 @@ export interface CardInfo {
   randomId: number;
   visible: boolean;
 }
+export interface SelectedCard {
+  avatarId: string;
+  randomId: number;
+}
