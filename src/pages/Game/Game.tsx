@@ -16,6 +16,7 @@ import {
   selectScore,
   selectStatus,
   selectCards,
+  selectError,
   updateScore,
   getCards,
   setStatus,
@@ -51,6 +52,7 @@ const Game: FC = () => {
   const score = useAppSelector(selectScore);
   const cards = useAppSelector(selectCards);
   const status = useAppSelector(selectStatus);
+  const error = useAppSelector(selectError);
   const dispatch = useAppDispatch();
   const [timeLeft, setTimeLeft] = useState<number>(GAME_TIME);
   const [cardsList, setCardsList] = useState<CardInfo[]>([]);
@@ -93,12 +95,13 @@ const Game: FC = () => {
     dispatch(getCards());
   };
 
-  const handleCardClick = (randomId: number, avatarId: string) => {
-    setSelectedCards([...selectedCards, { avatarId, randomId }]);
-    setCardsList(revealCard(cardsList, randomId));
+  const handleCardClick = (uniqueId: string, avatarId: string) => {
+    setSelectedCards([...selectedCards, { avatarId, uniqueId }]);
+    setCardsList(revealCard(cardsList, uniqueId));
   };
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <CircularProgress data-testid="loading-spinner" />;
+  if (error) return <Typography>{error}</Typography>;
 
   return (
     <>
@@ -107,7 +110,8 @@ const Game: FC = () => {
         <Grid container justify="center" alignItems="center">
           <Grid item>
             <Button
-              onClick={() => dispatch(getCards())}
+              data-testid="start-button"
+              onClick={startGame}
               variant="contained"
               color="primary"
             >
@@ -118,6 +122,7 @@ const Game: FC = () => {
       ) : (
         <>
           <div
+            data-testid="grid"
             className={clsx([
               grid,
               isDesktopOrTablet ? desktopGrid : mobileGrid,
@@ -128,14 +133,14 @@ const Game: FC = () => {
                 disabled={
                   selectedCards.length === 2 ||
                   selectedCards
-                    .map((selected) => selected.randomId)
-                    .includes(card.randomId)
+                    .map((selected) => selected.uniqueId)
+                    .includes(card.uniqueId)
                 }
-                key={card.randomId}
+                key={card.uniqueId}
                 cardId={card.avatarId}
                 image={card.avatarUrl}
                 visible={card.visible}
-                onClick={() => handleCardClick(card.randomId, card.avatarId)}
+                onClick={() => handleCardClick(card.uniqueId, card.avatarId)}
               />
             ))}
           </div>

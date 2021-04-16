@@ -1,8 +1,9 @@
+import { GithubContributor } from "types/types";
 import { dealCards, hideCards, revealCard, transformAvatars } from "./helpers";
 
 describe("HELPER FUNCTIONS", () => {
   it("should transform avatars to cards", () => {
-    const fakeData = [
+    const fakeData: GithubContributor[] = [
       {
         login: "zpao",
         id: 8445,
@@ -39,44 +40,44 @@ describe("HELPER FUNCTIONS", () => {
       {
         avatarUrl: "url1",
         avatarId: "id1",
-        randomId: 111,
+        uniqueId: "111",
         visible: true,
       },
       {
         avatarUrl: "url2",
         avatarId: "id2",
-        randomId: 222,
+        uniqueId: "222",
         visible: true,
       },
       {
         avatarUrl: "url3",
         avatarId: "id3",
-        randomId: 333,
+        uniqueId: "333",
         visible: true,
       },
     ];
 
     const testSelectedCards = [
-      { avatarId: "id1", randomId: 111 },
-      { avatarId: "id2", randomId: 222 },
+      { avatarId: "id1", uniqueId: "111" },
+      { avatarId: "id2", uniqueId: "222" },
     ];
     const expectedCardsList = [
       {
         avatarUrl: "url1",
         avatarId: "id1",
-        randomId: 111,
+        uniqueId: "111",
         visible: false,
       },
       {
         avatarUrl: "url2",
         avatarId: "id2",
-        randomId: 222,
+        uniqueId: "222",
         visible: false,
       },
       {
         avatarUrl: "url3",
         avatarId: "id3",
-        randomId: 333,
+        uniqueId: "333",
         visible: true,
       },
     ];
@@ -91,47 +92,47 @@ describe("HELPER FUNCTIONS", () => {
       {
         avatarUrl: "url1",
         avatarId: "id1",
-        randomId: 111,
+        uniqueId: "111",
         visible: false,
       },
       {
         avatarUrl: "url2",
         avatarId: "id2",
-        randomId: 222,
+        uniqueId: "222",
         visible: false,
       },
       {
         avatarUrl: "url3",
         avatarId: "id3",
-        randomId: 333,
+        uniqueId: "333",
         visible: false,
       },
     ];
 
-    const randomId = 222;
+    const uniqueId = "222";
 
     const expectedCardsList = [
       {
         avatarUrl: "url1",
         avatarId: "id1",
-        randomId: 111,
+        uniqueId: "111",
         visible: false,
       },
       {
         avatarUrl: "url2",
         avatarId: "id2",
-        randomId: 222,
+        uniqueId: "222",
         visible: true,
       },
       {
         avatarUrl: "url3",
         avatarId: "id3",
-        randomId: 333,
+        uniqueId: "333",
         visible: false,
       },
     ];
 
-    expect(revealCard(testCardsList, randomId)).toEqual(expectedCardsList);
+    expect(revealCard(testCardsList, uniqueId)).toEqual(expectedCardsList);
   });
 
   it("should deal cards correctly", () => {
@@ -139,25 +140,25 @@ describe("HELPER FUNCTIONS", () => {
       {
         avatarUrl: "url1",
         avatarId: "id1",
-        randomId: 111,
+        uniqueId: "111",
         visible: false,
       },
       {
         avatarUrl: "url2",
         avatarId: "id2",
-        randomId: 222,
+        uniqueId: "222",
         visible: false,
       },
       {
         avatarUrl: "url3",
         avatarId: "id3",
-        randomId: 333,
+        uniqueId: "333",
         visible: false,
       },
       {
         avatarUrl: "url4",
         avatarId: "id4",
-        randomId: 444,
+        uniqueId: "444",
         visible: false,
       },
     ];

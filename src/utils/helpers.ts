@@ -1,12 +1,13 @@
-import { CardInfo, SelectedCard } from "types/types";
+import { v4 as uuid4 } from "uuid";
+import { CardInfo, GithubContributor, SelectedCard } from "types/types";
 
-export const transformAvatars = (result: any): CardInfo[] =>
-  result.map((item: any) => {
+export const transformAvatars = (response: GithubContributor[]): CardInfo[] =>
+  response.map((item) => {
     return {
       avatarUrl: item.avatar_url,
       avatarId: item.node_id,
       visible: false,
-      randomId: 0,
+      uniqueId: "",
     };
   });
 
@@ -15,9 +16,8 @@ export const dealCards = (array: CardInfo[], n: number) => {
   const subArray = [...allShuffled].slice(0, n);
   const duplicated = [...subArray, ...subArray];
   const result = duplicated.sort(() => 0.5 - Math.random());
-
   return result.map((avatar) => {
-    return { ...avatar, randomId: Math.floor(Math.random() * 1000) + 1 };
+    return { ...avatar, uniqueId: uuid4() };
   });
 };
 
@@ -34,9 +34,9 @@ export const hideCards = (
     return card;
   });
 
-export const revealCard = (cardsList: CardInfo[], randomId: number) =>
+export const revealCard = (cardsList: CardInfo[], uniqueId: string) =>
   cardsList.map((card) => {
-    if (card.randomId === randomId) {
+    if (card.uniqueId === uniqueId) {
       return { ...card, visible: true };
     }
     return card;

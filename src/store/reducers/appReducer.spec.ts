@@ -22,7 +22,7 @@ describe("APP REDUCER", () => {
     expect(pendingState.loading).toBe(true);
 
     const fullFilledAction = getCards.fulfilled(
-      [{ avatarUrl: "url1", avatarId: "id1", visible: false, randomId: 0 }],
+      [{ avatarUrl: "url1", avatarId: "id1", visible: false, uniqueId: "" }],
       "123"
     );
     const fullFilledState = appReducer(initialState, fullFilledAction);

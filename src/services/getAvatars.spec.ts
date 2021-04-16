@@ -1,7 +1,8 @@
 import getAvatars from "services/getAvatars";
 import fetchMock from "fetch-mock-jest";
+import { GithubContributor } from "types/types";
 describe("getAvatars test", () => {
-  const fakeData = [
+  const fakeData: GithubContributor[] = [
     {
       login: "zpao",
       id: 8445,
@@ -27,7 +28,7 @@ describe("getAvatars test", () => {
 
   it("should get avatars", async () => {
     fetchMock.get(
-      "https://api.github.com/repos/facebook/react/contributors?per_page=25",
+      "https://api.github.com/repos/facebook/react/contributors?page=1&per_page=25",
       fakeData
     );
     expect(await getAvatars()).toEqual(fakeData);
