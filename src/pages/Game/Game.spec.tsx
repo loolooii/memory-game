@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor } from "test-utils";
+import { render, waitFor } from "test-utils";
 import userEvent from "@testing-library/user-event";
 import Game from "pages/Game/Game";
 
@@ -7,7 +7,6 @@ const getAvatarId = (img: Element) => {
   return splitAltText[splitAltText.length - 1];
 };
 describe("<Game />", () => {
-  jest.useRealTimers();
   it("should show loader after clicking start button and render grid", async () => {
     const { getByText, getByRole, getByTestId, getAllByRole } = render(
       <Game />
@@ -16,7 +15,7 @@ describe("<Game />", () => {
     const button = getByText("start game");
     expect(button).toBeInTheDocument();
 
-    fireEvent.click(button);
+    userEvent.click(button);
     const loadingSpinner = getByRole("progressbar");
     expect(loadingSpinner).toBeInTheDocument();
 
