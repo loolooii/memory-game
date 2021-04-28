@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import {
   Button,
   CircularProgress,
@@ -42,10 +42,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const GAME_TIME = 60;
+const GAME_TIME = 5;
 
 const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
+  const timerRef = useRef<number | null>(null);
   const theme = useTheme();
   const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
   const loading = useAppSelector(selectIsLoading);
@@ -81,12 +82,15 @@ const Game: FC = () => {
 
   // handles timer
   useEffect(() => {
-    if (timeLeft > 0 && status !== "won" && status !== "lost") {
-      setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    if (timeLeft > 0 && status === "started") {
+      timerRef.current = window.setTimeout(
+        () => setTimeLeft(timeLeft - 1),
+        1000
+      );
     } else if (timeLeft === 0) {
       dispatch(setStatus("lost"));
     }
-    return () => clearInterval(timeLeft);
+    return () => window.clearTimeout(timerRef.current!);
   }, [timeLeft, dispatch, status]);
 
   const startGame = () => {
