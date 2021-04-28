@@ -42,10 +42,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const GAME_TIME = 5;
+const GAME_TIME = 60;
 
 const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
+  const cardTurnTimer = useRef<number | null>(null);
   const timerRef = useRef<number | null>(null);
   const theme = useTheme();
   const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
@@ -71,12 +72,13 @@ const Game: FC = () => {
         dispatch(updateScore(100));
         setSelectedCards([]);
       } else {
-        setTimeout(() => {
+        cardTurnTimer.current = window.setTimeout(() => {
           setCardsList(hideCards(cardsList, selectedCards));
           setSelectedCards([]);
         }, 2000);
       }
     }
+    return () => window.clearTimeout(cardTurnTimer.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCards, dispatch]);
 
