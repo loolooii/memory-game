@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import {FC, useEffect, useMemo, useRef, useState} from "react";
 import {
   Button,
   CircularProgress,
@@ -24,6 +24,7 @@ import {
 import { CardInfo, SelectedCard } from "types/types";
 import { dealCards, hideCards, revealCard } from "utils/helpers";
 import EndGameDialog from "components/EndGameDialog/EndGameDialog";
+import GameTimer from "../../components/GameTimer/GameTimer";
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -42,12 +43,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const GAME_TIME = 60;
-
 const Game: FC = () => {
   const { grid, mobileGrid, desktopGrid } = useStyles();
   const cardTurnTimer = useRef<number | null>(null);
-  const timerRef = useRef<number | null>(null);
   const theme = useTheme();
   const isDesktopOrTablet = useMediaQuery(theme.breakpoints.up("sm"));
   const loading = useAppSelector(selectIsLoading);
@@ -56,7 +54,6 @@ const Game: FC = () => {
   const status = useAppSelector(selectStatus);
   const error = useAppSelector(selectError);
   const dispatch = useAppDispatch();
-  const [timeLeft, setTimeLeft] = useState<number>(GAME_TIME);
   const [cardsList, setCardsList] = useState<CardInfo[]>([]);
   const [selectedCards, setSelectedCards] = useState<SelectedCard[]>([]);
 
@@ -82,21 +79,7 @@ const Game: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCards, dispatch]);
 
-  // handles timer
-  useEffect(() => {
-    if (timeLeft > 0 && status === "started") {
-      timerRef.current = window.setTimeout(
-        () => setTimeLeft(timeLeft - 1),
-        1000
-      );
-    } else if (timeLeft === 0) {
-      dispatch(setStatus("lost"));
-    }
-    return () => window.clearTimeout(timerRef.current!);
-  }, [timeLeft, dispatch, status]);
-
   const startGame = () => {
-    setTimeLeft(GAME_TIME);
     dispatch(setStatus("started"));
     dispatch(getCards());
   };
@@ -152,7 +135,7 @@ const Game: FC = () => {
           </div>
           <Grid container justify="space-between">
             <Grid item xs={12} sm={6}>
-              <Typography variant="h4">Time: {timeLeft} seconds</Typography>
+              <GameTimer />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography
